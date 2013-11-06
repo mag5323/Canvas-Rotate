@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<meta charset="utf-8">
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<title>How to rotate an image example 1 - translations</title>
+	<style>
+		canvas {
+			border : 1px gray solid; 
+			margin : 200px;
+		}
+	</style>
+</head>
+<body onload='init();'>
+
+<canvas id="tick" width="500" height="500"></canvas>
+
+<script>	
+	var logoImage = new Image(); 
+	logoImage.src = 'tick4.png';
+	
+	var canvas = document.getElementById('tick'); 	
+	var max = getMax(getImgWidth(logoImage), getImgHeight(logoImage));
+	
+	canvas.width = max; 
+	canvas.height = max; 
+	
+	var context = canvas.getContext('2d'); 
+	
+	document.body.appendChild(canvas); 
+	var angle = 1 * (Math.PI / 180);
+	
+	setInterval('rotate()', 10);	
+	
+	function init() {
+		//max = getMax(getImgWidth(logoImage), getImgHeight(logoImage));
+	}
+	
+	function getMax(width, height) {
+		return (width^2 + height^2) ^ 0.5;
+	}
+	
+	function getImgWidth(img) {
+		return img.width;
+	}
+	
+	function getImgHeight(img) {
+		return img.height;
+	}
+	
+	function rotate() {			
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		context.save();
+		context.translate(237/2, 237/2);  
+		context.rotate(angle += 1 * (Math.PI / 180));  
+		context.drawImage(logoImage, 0-(logoImage.width/2), 0-(logoImage.height/2)); 
+		context.restore();
+	}	
+	</script>
+</body>
+</html>
