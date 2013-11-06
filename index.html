@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<meta charset="utf-8">
+<head>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/redmond/jquery-ui.css" />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+	<title>Rotation</title>
+	<style>
+		body {
+			margin: 100px 200px;
+		}
+	
+		canvas {
+			border: 1px gray solid; 
+		}
+		
+		#slider {
+			margin-top: 20px;
+		}
+	</style>
+</head>
+<body onload="init()">
+
+<canvas id="tick"></canvas>
+<div id="slider"></div>
+<p></p>
+
+<script>
+	
+	$( "#slider" ).slider({
+		min: 0,
+		max: 8000,
+		slide: function( event, ui ) {
+			var val = ui.value;
+			$("p").text( val );
+			rotate( val );
+		}
+	});
+	
+	var tick = new Image(); 
+	tick.src = 'tick.png';
+	
+	var canvas = document.getElementById('tick'); 	
+	var context = canvas.getContext('2d');
+	var max;
+	
+	/* RPM 8000/12  = 1 degree*/
+	var RPMperGrad = 8000/12; 	
+	
+	function init() {
+		max = getMax(getImgWidth(tick), getImgHeight(tick));
+		canvas.width = max; 
+		canvas.height = max; 
+		$( "#slider" ).css( "width", max );
+		rotate(0);
+	}
+	
+	function getMax(width, height) {
+		return Math.sqrt(width*width + height*height);
+	}
+	
+	function getImgWidth(img) {
+		return img.width;
+	}
+	
+	function getImgHeight(img) {
+		return img.height;
+	}
+	
+	function rotate(nowAngle) {			
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		context.save();
+		context.translate(max/2, max/2);  
+		context.rotate( (nowAngle / RPMperGrad * 15) * (Math.PI / 180));  
+		context.drawImage(tick, 0-(tick.width/2), 0-(tick.height/2)); 
+		context.restore();
+	}
+	
+	/*
+	var angle = 1 * (Math.PI / 180);	
+	setInterval('rotate()', 10);
+	function rotate() {			
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		context.save();
+		context.translate(max/2, max/2);  
+		context.rotate(angle += 1 * (Math.PI / 180));  
+		context.drawImage(logoImage, 0-(tick.width/2), 0-(tick.height/2)); 
+		context.restore();
+	}
+	*/
+	</script>
+</body>
+</html>
