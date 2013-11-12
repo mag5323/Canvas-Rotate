@@ -1,32 +1,48 @@
 package com.example.animate;
 
-import android.os.Bundle;
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
+import android.os.Bundle;
 import android.view.Menu;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 
 public class MainActivity extends Activity {
-
+	
+	CustomView cv;
+	SeekBar RPM;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		Bitmap bitmapOrg = BitmapFactory.decodeResource(getResources(),R.drawable.ticker).copy(Bitmap.Config.ARGB_8888,  true );
-	
-	    int width = bitmapOrg.getWidth();
-	    int height = bitmapOrg.getHeight();
-	    Bitmap targetBitmap = Bitmap.createBitmap(bitmapOrg, 0, 0, width, height);
-	    
-	    Canvas canvas = new Canvas(targetBitmap);
-	    Matrix matrix = new Matrix();
-	    matrix.setRotate(50, width/2, height/2);
-	    canvas.drawBitmap(bitmapOrg, matrix, new Paint());
+		final LinearLayout mLayout = (LinearLayout)findViewById(R.id.main);
+		
+		RPM = (SeekBar)findViewById(R.id.RPMbar);
+		
+		cv = new CustomView(this, null);
+		mLayout.addView(cv);   
+
+		
+		RPM.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){                         
+              @Override
+              public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            	  cv.setRPM(progress);
+				  cv.invalidate();
+              }
+
+              @Override
+              public void onStartTrackingTouch(SeekBar arg0) {
+                      // TODO Auto-generated method stub
+
+              }
+
+              @Override
+              public void onStopTrackingTouch(SeekBar arg0) {
+                      // TODO Auto-generated method stub
+
+              }
+      });
 	   
 	}
 
